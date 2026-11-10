@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran Informatika - Sistem Operasi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            700: '#0e7490',
+                            900: '#164e63',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        /* Anti anti-select for inputs */
+        input, textarea {
+            user-select: text !important;
+            -webkit-user-select: text !important;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .pulse-glow {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.35);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between antialiased selection:bg-cyan-500 selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-cyan-500/20">
+                    <i class="fa-solid to-cpu fa-microchip"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-white leading-none tracking-wide">OS<span class="text-cyan-400">Academy</span></h1>
+                    <p class="text-xs text-slate-400 font-medium">Informatika - Sistem Operasi</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav id="navTabs" class="hidden md:flex items-center gap-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+                <button onclick="switchTab('materi')" id="btn-materi" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-cyan-400 bg-slate-800">
+                    <i class="fa-solid fa-book-open mr-2"></i>Materi
+                </button>
+                <button onclick="switchTab('game')" id="btn-game" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200">
+                    <i class="fa-solid fa-gamepad mr-2"></i>Game Puzzle
+                </button>
+                <button onclick="switchTab('ujian')" id="btn-ujian" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200">
+                    <i class="fa-solid fa-file-pen mr-2"></i>Uji Kompetensi
+                </button>
+                <button onclick="switchTab('panduan')" id="btn-panduan" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200">
+                    <i class="fa-solid fa-circle-info mr-2"></i>Petunjuk
+                </button>
+            </nav>
+
+            <!-- Mobile Nav Toggle -->
+            <div class="flex items-center gap-2">
+                <span id="cheatBadge" class="hidden px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <i class="fa-solid fa-shield-halved mr-1"></i>Integritas 100%
+                </span>
+                <button onclick="toggleMobileNav()" class="md:hidden p-2 rounded-lg bg-slate-900 text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800 bg-slate-900 px-4 py-3 space-y-2">
+            <button onclick="switchTab('materi')" class="w-full text-left px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800">
+                <i class="fa-solid fa-book-open mr-2 text-cyan-400"></i>Materi Pembelajaran
+            </button>
+            <button onclick="switchTab('game')" class="w-full text-left px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800">
+                <i class="fa-solid fa-gamepad mr-2 text-purple-400"></i>Game Puzzle OS
+            </button>
+            <button onclick="switchTab('ujian')" class="w-full text-left px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800">
+                <i class="fa-solid fa-file-pen mr-2 text-emerald-400"></i>Uji Kompetensi (25 Soal)
+            </button>
+            <button onclick="switchTab('panduan')" class="w-full text-left px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800">
+                <i class="fa-solid fa-circle-info mr-2 text-amber-400"></i>Petunjuk Guru & Siswa
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- SECTION 1: MATERI PEMBELAJARAN -->
+        <section id="section-materi" class="space-y-8 animate-fade-in">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-8 border border-slate-800 shadow-2xl">
+                <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-3xl">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mb-4">
+                        <i class="fa-solid fa-layer-group"></i> Modul Pembelajaran Informatika
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                        Fungsi Utama & Peran <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Sistem Operasi</span>
+                    </h2>
+                    <p class="mt-3 text-slate-300 text-base sm:text-lg font-normal leading-relaxed">
+                        Sistem Operasi (Operating System / OS) adalah perangkat lunak sistem terpenting yang bertindak sebagai jembatan penengah antara perangkat keras (hardware) dan pengguna (user/aplikasi), serta mengelola seluruh sumber daya komputer agar bekerja secara efisien, aman, dan teratur.
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-4">
+                        <button onclick="switchTab('game')" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-cyan-500/25 flex items-center gap-2">
+                            <i class="fa-solid fa-puzzle-piece"></i> Coba Game Simulation
+                        </button>
+                        <button onclick="switchTab('ujian')" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm border border-slate-700 transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-pen-to-square"></i> Langsung Uji Kompetensi
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Grid Cards / Tabs -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Side Sub-menu -->
+                <div class="lg:col-span-1 space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 px-3 mb-2">Daftar Sub-Topik</h3>
+                    <button onclick="showSubMateri('m1')" id="sub-m1" class="submateri-btn w-full text-left p-3.5 rounded-xl font-medium text-sm transition-all bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 flex items-center justify-between">
+                        <span><i class="fa-solid fa-diagram-project mr-2 text-cyan-400"></i>1. Peran & Hirarki OS</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <button onclick="showSubMateri('m2')" id="sub-m2" class="submateri-btn w-full text-left p-3.5 rounded-xl font-medium text-sm transition-all bg-slate-900 text-slate-400 hover:bg-slate-800/80 hover:text-white border border-slate-800 flex items-center justify-between">
+                        <span><i class="fa-solid fa-microchip mr-2 text-indigo-400"></i>2. Manajemen Proses (CPU)</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <button onclick="showSubMateri('m3')" id="sub-m3" class="submateri-btn w-full text-left p-3.5 rounded-xl font-medium text-sm transition-all bg-slate-900 text-slate-400 hover:bg-slate-800/80 hover:text-white border border-slate-800 flex items-center justify-between">
+                        <span><i class="fa-solid fa-memory mr-2 text-emerald-400"></i>3. Manajemen Memori Utama</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <button onclick="showSubMateri('m4')" id="sub-m4" class="submateri-btn w-full text-left p-3.5 rounded-xl font-medium text-sm transition-all bg-slate-900 text-slate-400 hover:bg-slate-800/80 hover:text-white border border-slate-800 flex items-center justify-between">
+                        <span><i class="fa-solid fa-hard-drive mr-2 text-amber-400"></i>4. Storage & File System</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <button onclick="showSubMateri('m5')" id="sub-m5" class="submateri-btn w-full text-left p-3.5 rounded-xl font-medium text-sm transition-all bg-slate-900 text-slate-400 hover:bg-slate-800/80 hover:text-white border border-slate-800 flex items-center justify-between">
+                        <span><i class="fa-solid fa-print mr-2 text-rose-400"></i>5. Perangkat I/O & Driver</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <button onclick="showSubMateri('m6')" id="sub-m6" class="submateri-btn w-full text-left p-3.5 rounded-xl font-medium text-sm transition-all bg-slate-900 text-slate-400 hover:bg-slate-800/80 hover:text-white border border-slate-800 flex items-center justify-between">
+                        <span><i class="fa-solid fa-user-shield mr-2 text-purple-400"></i>6. Antarmuka & Keamanan</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Sub-Materi Content Viewer -->
+                <div class="lg:col-span-3 bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 min-h-[450px]">
+                    
+                    <!-- Sub 1 -->
+                    <div id="content-m1" class="sub-content space-y-6">
+                        <div class="border-b border-slate-800 pb-4">
+                            <span class="text-xs font-semibold text-cyan-400 uppercase tracking-widest">Topik 01</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">Pengertian, Peran, dan Hirarki Sistem Operasi</h3>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed">
+                            Tanpa sistem operasi, komputer hanyalah sekumpulan komponen elektronik mati yang tidak dapat digunakan. Sistem operasi berfungsi sebagai **Resource Allocator** (Pengalokasi Sumber Daya) dan **Control Program** (Program Pengontrol).
+                        </p>
+                        
+                        <!-- Hierarchy Diagram Box -->
+                        <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                            <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wide text-center mb-4">Hirarki Layer Komputer</h4>
+                            <div class="space-y-2 text-center text-xs font-semibold">
+                                <div class="p-3 bg-purple-500/20 border border-purple-500/40 text-purple-300 rounded-xl">USER (Pengguna Komputer)</div>
+                                <div class="text-slate-500"><i class="fa-solid fa-arrow-down"></i></div>
+                                <div class="p-3 bg-blue-500/20 border border-blue-500/40 text-blue-300 rounded-xl">APLIKASI (Web Browser, Game, MS Word, Video Player)</div>
+                                <div class="text-slate-500"><i class="fa-solid fa-arrow-down"></i></div>
+                                <div class="p-3 bg-cyan-500/30 border border-cyan-400 text-cyan-200 rounded-xl shadow-md font-bold">SISTEM OPERASI (Kernel, Drivers, System Services)</div>
+                                <div class="text-slate-500"><i class="fa-solid fa-arrow-down"></i></div>
+                                <div class="p-3 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 rounded-xl">HARDWARE (CPU, RAM, Harddisk/SSD, GPU, Perangkat I/O)</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                            <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60">
+                                <h4 class="font-bold text-cyan-400 flex items-center gap-2 mb-2">
+                                    <i class="fa-solid fa-sliders"></i> Resource Manager
+                                </h4>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    Mengatur dan mengalokasikan CPU time, memori RAM, ruang disk, serta saluran komunikasi I/O secara adil dan efisien antar aplikasi yang berjalan secara bersamaan.
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60">
+                                <h4 class="font-bold text-indigo-400 flex items-center gap-2 mb-2">
+                                    <i class="fa-solid fa-shield-virus"></i> Control Program
+                                </h4>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    Mengawasi eksekusi program pengguna untuk mencegah terjadinya error, konflik antar aplikasi, dan akses ilegal terhadap perangkat keras.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub 2 -->
+                    <div id="content-m2" class="sub-content hidden space-y-6">
+                        <div class="border-b border-slate-800 pb-4">
+                            <span class="text-xs font-semibold text-indigo-400 uppercase tracking-widest">Topik 02</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">Manajemen Proses & CPU Scheduling</h3>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed">
+                            **Proses** adalah program yang sedang dieksekusi oleh CPU. Karena CPU bekerja sangat cepat, sistem operasi melakukan teknik **Multitasking** dan **Scheduling** (penjadwalan) agar komputer terkesan dapat menjalankan banyak aplikasi dalam waktu bersamaan.
+                        </p>
+                        <div class="p-5 rounded-2xl bg-indigo-950/40 border border-indigo-800/40 space-y-3">
+                            <h4 class="font-bold text-indigo-300 text-sm"><i class="fa-solid fa-arrows-spin mr-2"></i>5 Status Siklus Hidup Proses (State):</h4>
+                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-300">
+                                <li class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><b class="text-cyan-400">1. New:</b> Proses baru diciptakan.</li>
+                                <li class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><b class="text-cyan-400">2. Ready:</b> Siap dieksekusi, menunggu giliran CPU.</li>
+                                <li class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><b class="text-cyan-400">3. Running:</b> Instruksi sedang dijalankan oleh CPU.</li>
+                                <li class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><b class="text-cyan-400">4. Waiting/Blocked:</b> Menunggu event (contoh: input keyboard/baca file).</li>
+                                <li class="bg-slate-900 p-2.5 rounded-lg border border-slate-800"><b class="text-cyan-400">5. Terminated:</b> Proses selesai atau dihentikan.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <h4 class="font-bold text-amber-400 text-sm mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Penanganan Deadlock:</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Deadlock terjadi ketika dua atau lebih proses saling mengunci dan menunggu sumber daya yang dipegang oleh proses lain secara permanen. OS bertugas mencegah, mendeteksi, atau menghentikan situasi deadlock tersebut.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Sub 3 -->
+                    <div id="content-m3" class="sub-content hidden space-y-6">
+                        <div class="border-b border-slate-800 pb-4">
+                            <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Topik 03</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">Manajemen Memori Utama (RAM & Virtual Memory)</h3>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed">
+                            Memori Utama (RAM) adalah tempat penyimpanan sementara berkecepatan tinggi yang menyimpan data dan instruksi yang sedang diproses CPU. Sistem operasi mengatur alokasi dan dealokasi ruang memori untuk setiap program.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-5 rounded-xl bg-slate-950 border border-slate-800">
+                                <h4 class="font-bold text-emerald-400 text-sm mb-2"><i class="fa-solid fa-memory mr-2"></i>Alokasi & Protection</h4>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    OS mencatat bagian memori mana yang sedang digunakan dan siapa yang menggunakannya. OS juga menjaga isolasi agar satu aplikasi tidak merusak area memori milik aplikasi lain.
+                                </p>
+                            </div>
+                            <div class="p-5 rounded-xl bg-slate-950 border border-slate-800">
+                                <h4 class="font-bold text-cyan-400 text-sm mb-2"><i class="fa-solid fa-cloud-arrow-up mr-2"></i>Virtual Memory & Paging</h4>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    Ketika RAM fisik hampir habis, OS memindahkan sebagian data inactive ke ruang khusus penyimpanan secondary (harddisk/SSD) yang disebut **Page File / Swap Space**. Ini memungkinkan komputer menjalankan program besar melebihi kapasitas fisik RAM.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub 4 -->
+                    <div id="content-m4" class="sub-content hidden space-y-6">
+                        <div class="border-b border-slate-800 pb-4">
+                            <span class="text-xs font-semibold text-amber-400 uppercase tracking-widest">Topik 04</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">Manajemen Penyimpanan & File System</h3>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed">
+                            Penyimpanan sekunder (Secondary Storage) bersifat non-volatile (data tidak hilang saat listrik mati). OS menyediakan bentuk abstraksi logis dari informasi penyimpanan dalam bentuk **File** dan **Folder/Direktori**.
+                        </p>
+                        <div class="p-5 rounded-2xl bg-amber-950/20 border border-amber-800/40 space-y-4">
+                            <h4 class="font-bold text-amber-300 text-sm"><i class="fa-regular fa-folder-open mr-2"></i>Fungsi File System (Sistem Berkas):</h4>
+                            <ul class="space-y-2 text-xs text-slate-300">
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-amber-400 mt-0.5"></i> Memetakan berkas ke media fisik (sector/cluster disk).</li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-amber-400 mt-0.5"></i> Mengelola struktur hierarki direktori (pohon direktori).</li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-amber-400 mt-0.5"></i> Menyimpan atribut berkas (nama, ukuran, tanggal buat, hak akses permission).</li>
+                            </ul>
+                            <div class="pt-2 text-xs text-slate-400 border-t border-amber-900/50">
+                                <b>Contoh File System:</b> NTFS & FAT32 (Windows), ext4 (Linux), APFS (macOS).
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub 5 -->
+                    <div id="content-m5" class="sub-content hidden space-y-6">
+                        <div class="border-b border-slate-800 pb-4">
+                            <span class="text-xs font-semibold text-rose-400 uppercase tracking-widest">Topik 05</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">Manajemen Perangkat Input/Output (I/O) & Driver</h3>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed">
+                            Komputer terhubung dengan berbagai perangkat periferal (keyboard, mouse, printer, scanner, GPU, dll). OS menyembunyikan rumitnya perbedaan spesifikasi hardware melalui **Device Drivers**.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                                <h5 class="font-bold text-rose-400 text-xs uppercase mb-1">1. Device Driver</h5>
+                                <p class="text-xs text-slate-400">Software khusus penerjemah antara OS dan perintah fisik perangkat keras spesifik.</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                                <h5 class="font-bold text-cyan-400 text-xs uppercase mb-1">2. Buffering</h5>
+                                <p class="text-xs text-slate-400">Menyimpan sementara data I/O untuk menyelaraskan perbedaan kecepatan transfer perangkat.</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                                <h5 class="font-bold text-purple-400 text-xs uppercase mb-1">3. Spooling</h5>
+                                <p class="text-xs text-slate-400">Mengantrekan tugas I/O (seperti dokumen yang akan dicetak di printer) di memori/disk.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub 6 -->
+                    <div id="content-m6" class="sub-content hidden space-y-6">
+                        <div class="border-b border-slate-800 pb-4">
+                            <span class="text-xs font-semibold text-purple-400 uppercase tracking-widest">Topik 06</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">Antarmuka Pengguna & Proteksi Keamanan</h3>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed">
+                            OS memberikan antarmuka bagi pengguna untuk berinteraksi dengan komputer, serta menjaga keamanan data dari akses yang tidak sah.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                                <h4 class="font-bold text-purple-300 text-sm mb-2"><i class="fa-solid fa-desktop mr-2"></i>Jenis User Interface (UI)</h4>
+                                <ul class="space-y-1.5 text-xs text-slate-300">
+                                    <li><b>CLI (Command Line Interface):</b> Teks berbasis perintah ketikan (CMD, Terminal Bash). Ringan & cepat.</li>
+                                    <li><b>GUI (Graphical User Interface):</b> Berbasis visual grafik, window, tombol & ikon. Sangat mudah digunakan.</li>
+                                </ul>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                                <h4 class="font-bold text-rose-400 text-sm mb-2"><i class="fa-solid fa-lock mr-2"></i>Keamanan & Hak Akses</h4>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    Menyediakan otentikasi (Password, Biometrik) serta mengontrol otorisasi hak akses berkas (*Read, Write, Execute*) untuk mencegah virus, malware, maupun peretasan.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: GAME EDUKASI (PUZZLE SIMULATION) -->
+        <section id="section-game" class="hidden space-y-8 animate-fade-in">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+                    <div>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-2 inline-block">
+                            <i class="fa-solid fa-gamepad"></i> Game Mini Simulasi
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">OS Resource Manager Matcher</h2>
+                        <p class="text-slate-400 text-sm mt-1">Jodohkan skenario kejadian komputer di sebelah kiri dengan komponen pengelola OS yang tepat di sebelah kanan!</p>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-950 px-5 py-3 rounded-2xl border border-slate-800">
+                        <div class="text-center">
+                            <div class="text-xs text-slate-400 font-medium">Skor Game</div>
+                            <div id="gameScore" class="text-2xl font-black text-cyan-400">0</div>
+                        </div>
+                        <div class="h-8 w-px bg-slate-800"></div>
+                        <div class="text-center">
+                            <div class="text-xs text-slate-400 font-medium">Sisa Pasangan</div>
+                            <div id="gameRemaining" class="text-2xl font-black text-amber-400">6</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Game Play Board -->
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Left: Problems/Scenarios -->
+                    <div class="space-y-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3"><i class="fa-solid fa-list-check mr-1 text-cyan-400"></i> Pilih Skenario Peristiwa:</h3>
+                        <div id="scenarioList" class="space-y-3">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Right: OS Components Target -->
+                    <div class="space-y-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3"><i class="fa-solid fa-microchip mr-1 text-purple-400"></i> Pilih Komponen OS yang Bertanggung Jawab:</h3>
+                        <div id="targetList" class="space-y-3">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Feedback Notification & Controls -->
+                <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-800">
+                    <div id="gameFeedback" class="text-sm font-semibold text-slate-400">
+                        Klik 1 Skenario, lalu Klik Komponen OS yang Sesuai!
+                    </div>
+                    <button onclick="resetGame()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm border border-slate-700 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> Reset Permainan
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: UJI KOMPETENSI (25 SOAL + ANTI NYONTEK) -->
+        <section id="section-ujian" class="hidden space-y-8 animate-fade-in">
+            
+            <!-- STEP 1: Registration Form -->
+            <div id="quizRegStep" class="max-w-xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+                <div class="text-center space-y-3 mb-6">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-cyan-500 mx-auto flex items-center justify-center text-slate-950 text-2xl font-black shadow-lg shadow-emerald-500/20">
+                        <i class="fa-solid fa-file-signature"></i>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-white">Lembar Uji Kompetensi OS</h2>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Evaluasi pemahaman materi Sistem Operasi. Soal terdiri dari **25 Butir Pilihan Ganda (A-E)**. Silakan isi data diri untuk memulai.
+                    </p>
+                </div>
+
+                <!-- Anti-Cheat Info Box -->
+                <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 mb-6 text-xs text-amber-300 space-y-1">
+                    <div class="font-bold flex items-center gap-1.5 text-amber-400">
+                        <i class="fa-solid fa-shield-cat"></i> Fitur Proteksi Keamanan & Kejujuran Aktif:
+                    </div>
+                    <ul class="list-disc list-inside space-y-1 text-slate-300 pt-1">
+                        <li>Dilarang berpindah tab / meminimalkan window (Tercatat otomatis).</li>
+                        <li>Klik kanan, copy-paste, dan tombol shortcut inspeksi dinonaktifkan.</li>
+                        <li>Urutan soal dan pilihan jawaban diacak otomatis untuk tiap siswa.</li>
+                    </ul>
+                </div>
+
+                <form onsubmit="startQuiz(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">Nama Lengkap Siswa</label>
+                        <input type="text" id="studentName" required placeholder="Contoh: Muhammad Budi Utomo" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">Kelas / Rombel</label>
+                            <input type="text" id="studentClass" required placeholder="Contoh: X RPL 1" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">Nomor Absen</label>
+                            <input type="number" id="studentAbsen" required placeholder="Contoh: 18" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-extrabold text-base transition-all shadow-lg shadow-emerald-500/25 mt-2 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play"></i> Mulai Kerjakan Ujian Sekarang
+                    </button>
+                </form>
+            </div>
+
+            <!-- STEP 2: Quiz Workstation (Active Test) -->
+            <div id="quizWorkstep" class="hidden space-y-6">
+                <!-- Quiz Header Bar -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-cyan-400 font-bold">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <div>
+                            <div id="displayStudentInfo" class="font-bold text-white text-sm">Nama Siswa (Kelas)</div>
+                            <div class="text-xs text-slate-400">Soal Uji Kompetensi Sistem Operasi</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                        <!-- Integrity Counter -->
+                        <div class="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2 text-xs">
+                            <span class="text-slate-400">Pelanggaran Tab:</span>
+                            <span id="cheatCountDisplay" class="font-bold text-emerald-400">0 Kali</span>
+                        </div>
+                        <!-- Timer -->
+                        <div class="px-4 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center gap-2 text-rose-400 font-mono font-bold text-sm">
+                            <i class="fa-solid fa-clock"></i>
+                            <span id="quizTimer">35:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Question Box & Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    <!-- Left: Question Card -->
+                    <div class="lg:col-span-3 bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 flex flex-col justify-between min-h-[420px]">
+                        <div>
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                                <span class="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                                    Soal Nomor <span id="currentQNum">1</span> dari 25
+                                </span>
+                                <span class="text-xs text-slate-500 font-medium">Pilihan Ganda (5 Opsi)</span>
+                            </div>
+
+                            <!-- Question Text -->
+                            <h3 id="questionText" class="text-lg sm:text-xl font-bold text-white leading-relaxed mb-6">
+                                Memuat teks pertanyaan...
+                            </h3>
+
+                            <!-- Options A-E -->
+                            <div id="optionsContainer" class="space-y-3">
+                                <!-- Dynamically generated radio/buttons -->
+                            </div>
+                        </div>
+
+                        <!-- Question Nav Control Footer -->
+                        <div class="flex items-center justify-between pt-8 border-t border-slate-800 mt-8">
+                            <button onclick="prevQuestion()" id="btnPrevQ" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm transition flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                                <i class="fa-solid fa-arrow-left"></i> Sebelumnya
+                            </button>
+                            <button onclick="nextQuestion()" id="btnNextQ" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition flex items-center gap-2">
+                                Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Question Number Grid Palette -->
+                    <div class="lg:col-span-1 bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Navigasi Nomor Soal</h4>
+                            <div id="questionGrid" class="grid grid-cols-5 gap-2">
+                                <!-- 1 to 25 buttons -->
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-slate-800 mt-6 space-y-3">
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Sudah Dijawab
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <span class="w-3 h-3 rounded-full bg-slate-800 border border-slate-700 inline-block"></span> Belum Dijawab
+                            </div>
+                            <button onclick="confirmSubmitQuiz()" class="w-full mt-4 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> Selesaikan Ujian
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: Result & Report Step -->
+            <div id="quizResultStep" class="hidden space-y-8 max-w-4xl mx-auto">
+                <!-- Result Summary Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+                        <i class="fa-solid fa-circle-check"></i> Uji Kompetensi Selesai
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-white">Hasil & Laporan Nilai Siswa</h2>
+                    
+                    <!-- Main Score Badge -->
+                    <div class="py-6 my-2 bg-slate-950 rounded-2xl border border-slate-800 max-w-md mx-auto grid grid-cols-2 gap-4 divide-x divide-slate-800">
+                        <div>
+                            <div class="text-xs text-slate-400 uppercase font-semibold">Nilai Akhir</div>
+                            <div id="finalScoreDisplay" class="text-5xl font-black text-cyan-400 mt-1">0</div>
+                            <div class="text-xs text-slate-500 mt-1">Skala 100</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-400 uppercase font-semibold">Skor Kejujuran</div>
+                            <div id="finalIntegrityDisplay" class="text-5xl font-black text-emerald-400 mt-1">100%</div>
+                            <div id="finalViolationText" class="text-xs text-slate-500 mt-1">0 Violasi Tab</div>
+                        </div>
+                    </div>
+
+                    <!-- Detail Stats -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                        <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+                            <div class="text-xs text-slate-400">Jawaban Benar</div>
+                            <div id="countCorrect" class="text-xl font-bold text-emerald-400 mt-1">0 / 25</div>
+                        </div>
+                        <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+                            <div class="text-xs text-slate-400">Jawaban Salah</div>
+                            <div id="countWrong" class="text-xl font-bold text-rose-400 mt-1">0 / 25</div>
+                        </div>
+                        <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+                            <div class="text-xs text-slate-400">Waktu Tempuh</div>
+                            <div id="timeTakenDisplay" class="text-xl font-bold text-cyan-400 mt-1">00:00</div>
+                        </div>
+                        <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+                            <div class="text-xs text-slate-400">Predikat</div>
+                            <div id="gradePredicate" class="text-xl font-bold text-amber-400 mt-1">Sangat Baik</div>
+                        </div>
+                    </div>
+
+                    <!-- Teacher Report Buttons -->
+                    <div class="pt-4 flex flex-wrap justify-center gap-4 border-t border-slate-800">
+                        <button onclick="copyTeacherReport()" class="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition shadow-lg shadow-emerald-500/20 flex items-center gap-2">
+                            <i class="fa-solid fa-copy"></i> Salin Format Laporan Guru (WA)
+                        </button>
+                        <button onclick="printResultCard()" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm border border-slate-700 transition flex items-center gap-2">
+                            <i class="fa-solid fa-print"></i> Cetak / Simpan Hasil PDF
+                        </button>
+                        <button onclick="toggleReviewMode()" class="px-6 py-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-semibold text-sm transition flex items-center gap-2">
+                            <i class="fa-solid fa-list-check"></i> Lihat Pembahasan Soal
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Review Questions Container -->
+                <div id="reviewContainer" class="hidden space-y-4">
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-bookmark text-cyan-400"></i> Pembahasan 25 Soal Uji Kompetensi
+                    </h3>
+                    <div id="reviewList" class="space-y-4">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SECTION 4: PETUNJUK GURU & SISWA -->
+        <section id="section-panduan" class="hidden space-y-6 animate-fade-in">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-2 inline-block">
+                        <i class="fa-solid fa-chalkboard-user"></i> Panduan Penggunaan
+                    </span>
+                    <h2 class="text-2xl font-bold text-white">Petunjuk untuk Guru Informatika & Murid</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                        <h3 class="font-bold text-cyan-400 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-user-gear"></i> Untuk Guru Informatika:
+                        </h3>
+                        <ol class="list-decimal list-inside text-xs text-slate-300 space-y-2 leading-relaxed">
+                            <li>Minta murid membaca 6 Sub-Topik Materi terlebih dahulu sebagai pendalaman konsep.</li>
+                            <li>Arahkan murid memainkan **Game Puzzle OS** untuk menguji pemahaman visual alokasi sumber daya.</li>
+                            <li>Tugaskan murid membuka **Uji Kompetensi** dan mengisikan Nama, Kelas, serta Nomor Absen.</li>
+                            <li>Sistem secara otomatis mendeteksi jika murid keluar dari tab browser (*Anti-Cheat Log*).</li>
+                            <li>Setelah selesai, murid menekan tombol **"Salin Format Laporan Guru"** lalu mengirimkan salinan teks tersebut ke WhatsApp Guru atau Google Classroom.</li>
+                        </ol>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                        <h3 class="font-bold text-emerald-400 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-user-ninja"></i> Fitur Anti-Nyontek Aktif:
+                        </h3>
+                        <ul class="list-disc list-inside text-xs text-slate-300 space-y-2 leading-relaxed">
+                            <li><b>Tab Switching Protection:</b> Setiap kali tab browser ditinggalkan, peringatan suara berbunyi & pelanggaran dicatat.</li>
+                            <li><b>Shuffled Questions & Options:</b> Urutan soal dan opsi A, B, C, D, E bersifat unik/acak untuk tiap peserta.</li>
+                            <li><b>Disable Copy-Paste:</b> Klik kanan dan kombinasi tombol salin-tempel diblokir.</li>
+                            <li><b>Integrity Score:</b> Skor kejujuran dihitung dari total minimnya pelanggaran selama waktu ujian.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-panel border-t border-slate-800/80 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div>
+                © 2026 <span class="text-slate-400 font-semibold">OS Academy Informatika</span> - Media Pembelajaran Interaktif Sistem Operasi.
+            </div>
+            <div class="flex items-center gap-4 text-slate-400">
+                <span class="hover:text-cyan-400 cursor-pointer" onclick="switchTab('materi')">Materi</span>
+                <span>•</span>
+                <span class="hover:text-cyan-400 cursor-pointer" onclick="switchTab('game')">Game</span>
+                <span>•</span>
+                <span class="hover:text-cyan-400 cursor-pointer" onclick="switchTab('ujian')">Uji Kompetensi</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Anti Cheat Warning Modal -->
+    <div id="cheatModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border-2 border-rose-500/50 rounded-3xl p-6 sm:p-8 max-w-md w-full text-center space-y-4 shadow-2xl">
+            <div class="w-16 h-16 rounded-full bg-rose-500/20 border border-rose-500 text-rose-400 mx-auto flex items-center justify-center text-2xl font-bold animate-bounce">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">PERINGATAN INTEGRITAS!</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Terdeteksi mencoba berpindah tab atau meninggalkan halaman ujian! Pelanggaran telah tercatat pada laporan akhir guru.
+            </p>
+            <div class="p-3 bg-slate-950 rounded-xl text-rose-400 font-bold text-xs">
+                Total Pelanggaran: <span id="modalCheatCount">1</span> kali
+            </div>
+            <button onclick="closeCheatModal()" class="w-full py-3 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-bold text-sm transition">
+                Saya Mengerti & Lanjutkan Ujian
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal Submit -->
+    <div id="submitModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full text-center space-y-4 shadow-2xl">
+            <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 border border-cyan-500 text-cyan-400 mx-auto flex items-center justify-center text-2xl font-bold">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Kirim Jawaban Ujian?</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Apakah Anda yakin ingin menyelesaikan Uji Kompetensi ini sekarang?
+            </p>
+            <div id="unansweredWarningText" class="text-xs font-semibold text-amber-400"></div>
+            <div class="flex items-center gap-3 pt-2">
+                <button onclick="closeSubmitModal()" class="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">
+                    Kembali Periksa
+                </button>
+                <button onclick="processFinalSubmit()" class="flex-1 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-emerald-500/20">
+                    Ya, Selesaikan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-cyan-500 text-slate-950 px-5 py-3 rounded-xl font-bold text-xs shadow-2xl transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2">
+        <i class="fa-solid fa-info-circle"></i> <span id="toastMsg">Pesan Notifikasi</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        /* -------------------------------------------------------------
+           1. AUDIO SYNTHESIS (NO EXTERNAL AUDIO FILES NEEDED)
+        ------------------------------------------------------------- */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'success') {
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
+                    osc.frequency.setValueAtTime(783.99, now + 0.16);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'wrong' || type === 'cheat') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.linearRampToValueAtTime(110, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                }
+            } catch (e) { console.log('Audio init'); }
+        }
+
+        /* -------------------------------------------------------------
+           2. NAVIGATION & SUB-MATERI LOGIC
+        ------------------------------------------------------------- */
+        function switchTab(tabId) {
+            playSound('click');
+            // Hide all sections
+            ['materi', 'game', 'ujian', 'panduan'].forEach(id => {
+                document.getElementById(`section-${id}`).classList.add('hidden');
+            });
+            // Show target
+            document.getElementById(`section-${tabId}`).classList.remove('hidden');
+
+            // Update Header Nav Styling
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('text-cyan-400', 'bg-slate-800');
+                btn.classList.add('text-slate-400');
+            });
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('text-cyan-400', 'bg-slate-800');
+                activeBtn.classList.remove('text-slate-400');
+            }
+
+            // Mobile menu hide
+            document.getElementById('mobileMenu').classList.add('hidden');
+        }
+
+        function toggleMobileNav() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function showSubMateri(subId) {
+            playSound('click');
+            // Hide all sub contents
+            document.querySelectorAll('.sub-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`content-${subId}`).classList.remove('hidden');
+
+            // Submenu active style
+            document.querySelectorAll('.submateri-btn').forEach(btn => {
+                btn.classList.remove('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/30');
+                btn.classList.add('bg-slate-900', 'text-slate-400', 'border-slate-800');
+            });
+            const activeSub = document.getElementById(`sub-${subId}`);
+            activeSub.classList.add('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/30');
+            activeSub.classList.remove('bg-slate-900', 'text-slate-400', 'border-slate-800');
+        }
+
+        /* -------------------------------------------------------------
+           3. GAME EDUKASI PUZZLE LOGIC
+        ------------------------------------------------------------- */
+        const puzzleData = [
+            { id: 1, scenario: "User mencetak 50 halaman dokumen di printer (Antrean Cetak)", target: "Spooling / Print Driver" },
+            { id: 2, scenario: "User membuka Chrome, Word, dan Photoshop sekaligus tanpa hang", target: "CPU Scheduler & Multitasking" },
+            { id: 3, scenario: "RAM fisik penuh 100%, OS menggunakan SSD/Harddisk sebagai RAM tambahan", target: "Virtual Memory & Paging" },
+            { id: 4, scenario: "Penyimpanan data foto terorganisir dalam folder dan hak akses berkas", target: "File System (NTFS / ext4)" },
+            { id: 5, scenario: "Keyboard dan Mouse dihubungkan via USB langsung dikenali komputer", target: "Device Driver Management" },
+            { id: 6, scenario: "Pengguna mengklik ikon dan tombol menu visual dengan mouse", target: "GUI (Graphical User Interface)" }
+        ];
+
+        let selectedScenario = null;
+        let selectedTarget = null;
+        let gameScore = 0;
+        let gameMatchedCount = 0;
+
+        function initGame() {
+            gameScore = 0;
+            gameMatchedCount = 0;
+            selectedScenario = null;
+            selectedTarget = null;
+            document.getElementById('gameScore').innerText = '0';
+            document.getElementById('gameRemaining').innerText = puzzleData.length;
+            document.getElementById('gameFeedback').innerText = "Klik 1 Skenario, lalu Klik Komponen OS yang Sesuai!";
+
+            const scenarioListEl = document.getElementById('scenarioList');
+            const targetListEl = document.getElementById('targetList');
+
+            // Shuffle lists
+            const scenarios = [...puzzleData].sort(() => Math.random() - 0.5);
+            const targets = [...puzzleData].sort(() => Math.random() - 0.5);
+
+            scenarioListEl.innerHTML = scenarios.map(item => `
+                <button onclick="selectGameScenario(${item.id})" id="scen-${item.id}" class="game-scen-btn w-full text-left p-3.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 transition text-xs text-slate-300 font-medium flex items-center justify-between gap-2">
+                    <span>${item.scenario}</span>
+                    <i class="fa-regular fa-circle text-slate-600"></i>
+                </button>
+            `).join('');
+
+            targetListEl.innerHTML = targets.map(item => `
+                <button onclick="selectGameTarget(${item.id})" id="targ-${item.id}" class="game-targ-btn w-full text-left p-3.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-purple-500/50 transition text-xs text-slate-300 font-semibold flex items-center justify-between gap-2">
+                    <span><i class="fa-solid fa-cube text-purple-400 mr-2"></i>${item.target}</span>
+                    <i class="fa-regular fa-circle text-slate-600"></i>
+                </button>
+            `).join('');
+        }
+
+        function selectGameScenario(id) {
+            playSound('click');
+            selectedScenario = id;
+            document.querySelectorAll('.game-scen-btn').forEach(btn => btn.classList.remove('border-cyan-500', 'bg-cyan-500/10'));
+            const active = document.getElementById(`scen-${id}`);
+            if (active && !active.disabled) {
+                active.classList.add('border-cyan-500', 'bg-cyan-500/10');
+            }
+            checkGamePair();
+        }
+
+        function selectGameTarget(id) {
+            playSound('click');
+            selectedTarget = id;
+            document.querySelectorAll('.game-targ-btn').forEach(btn => btn.classList.remove('border-purple-500', 'bg-purple-500/10'));
+            const active = document.getElementById(`targ-${id}`);
+            if (active && !active.disabled) {
+                active.classList.add('border-purple-500', 'bg-purple-500/10');
+            }
+            checkGamePair();
+        }
+
+        function checkGamePair() {
+            if (selectedScenario && selectedTarget) {
+                if (selectedScenario === selectedTarget) {
+                    // Match!
+                    playSound('success');
+                    gameScore += 20;
+                    gameMatchedCount += 1;
+                    document.getElementById('gameScore').innerText = gameScore;
+                    document.getElementById('gameRemaining').innerText = puzzleData.length - gameMatchedCount;
+
+                    const scenBtn = document.getElementById(`scen-${selectedScenario}`);
+                    const targBtn = document.getElementById(`targ-${selectedTarget}`);
+
+                    scenBtn.className = "w-full text-left p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-xs text-emerald-300 font-medium flex items-center justify-between";
+                    scenBtn.disabled = true;
+                    scenBtn.innerHTML += `<i class="fa-solid fa-check text-emerald-400"></i>`;
+
+                    targBtn.className = "w-full text-left p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-xs text-emerald-300 font-semibold flex items-center justify-between";
+                    targBtn.disabled = true;
+                    targBtn.innerHTML += `<i class="fa-solid fa-check text-emerald-400"></i>`;
+
+                    document.getElementById('gameFeedback').innerHTML = `<span class="text-emerald-400"><i class="fa-solid fa-circle-check"></i> Hebat! Pasangan tepat (+20 Skor)</span>`;
+
+                    if (gameMatchedCount === puzzleData.length) {
+                        document.getElementById('gameFeedback').innerHTML = `<span class="text-cyan-400 font-bold"><i class="fa-solid fa-trophy"></i> Selamat! Anda berhasil menyelesaikan semua Puzzle OS!</span>`;
+                    }
+                } else {
+                    // Wrong match
+                    playSound('wrong');
+                    document.getElementById('gameFeedback').innerHTML = `<span class="text-rose-400"><i class="fa-solid fa-circle-xmark"></i> Kurang Tepat! Coba pilih pasangan komponen OS yang lain.</span>`;
+                }
+
+                selectedScenario = null;
+                selectedTarget = null;
+                document.querySelectorAll('.game-scen-btn:not(:disabled)').forEach(b => b.classList.remove('border-cyan-500', 'bg-cyan-500/10'));
+                document.querySelectorAll('.game-targ-btn:not(:disabled)').forEach(b => b.classList.remove('border-purple-500', 'bg-purple-500/10'));
+            }
+        }
+
+        function resetGame() {
+            initGame();
+            showToast("Game Puzzle berhasil direset!");
+        }
+
+        /* -------------------------------------------------------------
+           4. UJI KOMPETENSI (25 SOAL PG + ANTI NYONTEK)
+        ------------------------------------------------------------- */
+        const rawQuestions = [
+            {
+                q: "Fungsi utama Sistem Operasi (OS) dalam tata kelola komputer adalah...",
+                options: [
+                    "Sebagai penghubung utama dan pengelola sumber daya antara pengguna, aplikasi, dan perangkat keras",
+                    "Membuat dokumen dan tabel angka secara otomatis",
+                    "Meningkatkan kapasitas fisik memori RAM secara otomatis tanpa hardware",
+                    "Menghapus virus dan malware dari koneksi internet tanpa antivirus",
+                    "Mengubah arus listrik AC menjadi DC pada komponen power supply"
+                ],
+                answer: 0,
+                explain: "OS bertindak sebagai perantara (bridge) & pengelola sumber daya (CPU, RAM, Disk, I/O) antara hardware dan user/aplikasi."
+            },
+            {
+                q: "Komponen inti sistem operasi yang selalu berada di memori utama dan bertanggung jawab atas tugas-tugas tingkat rendah seperti manajemen memori dan proses disebut...",
+                options: [
+                    "Kernel",
+                    "User Interface",
+                    "File Explorer",
+                    "Control Panel",
+                    "Compiler"
+                ],
+                answer: 0,
+                explain: "Kernel adalah inti (core) dari sistem operasi yang mengontrol instruksi langsung ke hardware."
+            },
+            {
+                q: "Ketika beberapa aplikasi dijalankan secara bersamaan dan CPU mengalokasikan waktu eksekusi secara bergantian dengan sangat cepat, teknik ini dinamakan...",
+                options: [
+                    "Multitasking & CPU Scheduling",
+                    "Defragmentation",
+                    "Overclocking",
+                    "Formatting",
+                    "Virtualization Storage"
+                ],
+                answer: 0,
+                explain: "Multitasking mengandalkan CPU Scheduling untuk membagi giliran eksekusi proses dalam hitungan milidetik."
+            },
+            {
+                q: "Fitur pada Sistem Operasi yang memanfaatkan sebagian ruang penyimpanan sekunder (SSD/HDD) sebagai tambahan saat RAM fisik penuh dinamakan...",
+                options: [
+                    "Virtual Memory (Paging / Swap)",
+                    "Read Only Memory (ROM)",
+                    "Cache Memory L1",
+                    "Cloud Backup Drive",
+                    "Registers CPU"
+                ],
+                answer: 0,
+                explain: "Virtual Memory mengizinkan penggunaan area swap/pagefile di disk untuk memuat data proses ketika RAM terbatas."
+            },
+            {
+                q: "Perangkat lunak khusus yang disediakan oleh pembuat perangkat keras agar Sistem Operasi dapat mengenali dan berkomunikasi dengan perangkat tersebut dinamakan...",
+                options: [
+                    "Device Driver",
+                    "BIOS/UEFI",
+                    "Firmware ROM",
+                    "System Restore",
+                    "Antivirus Signature"
+                ],
+                answer: 0,
+                explain: "Device Driver berisi instruksi spesifik penerjemah antara OS dan hardware fisik (seperti VGA, Printer)."
+            },
+            {
+                q: "Manakah di bawah ini yang merupakan contoh Sistem Operasi bersifat Open Source (sumber terbuka) yang bebas dimodifikasi?",
+                options: [
+                    "Linux (Ubuntu, Debian, Fedora)",
+                    "Microsoft Windows 11",
+                    "macOS Sonoma",
+                    "iOS",
+                    "MS-DOS"
+                ],
+                answer: 0,
+                explain: "Linux berlisensi open source (GPL), sehingga kode sumbernya terbuka untuk dipelajari dan dikembangkan."
+            },
+            {
+                q: "Struktur hirarki pengorganisasian berkas dan direktori pada media penyimpanan dikelola oleh komponen OS yang bernama...",
+                options: [
+                    "File System (Sistem Berkas)",
+                    "Power Management",
+                    "Bootloader",
+                    "Display Manager",
+                    "Interrupt Controller"
+                ],
+                answer: 0,
+                explain: "File System (seperti NTFS, FAT32, ext4) mengatur bagaimana file disimpan, dinamai, dan diakses."
+            },
+            {
+                q: "Kondisi di mana dua atau lebih proses saling menunggu sumber daya yang dikunci oleh proses lain secara permanen sehingga sistem macet dinamakan...",
+                options: [
+                    "Deadlock",
+                    "Bottleneck",
+                    "Blue Screen",
+                    "Overheating",
+                    "Buffer Overflow"
+                ],
+                answer: 0,
+                explain: "Deadlock adalah situasi di mana proses-proses tidak dapat melanjutkan eksekusi karena saling menunggu."
+            },
+            {
+                q: "Antarmuka sistem operasi yang hanya menampilkan baris perintah teks dan dioperasikan menggunakan papan ketik (keyboard) dinamakan...",
+                options: [
+                    "CLI (Command Line Interface)",
+                    "GUI (Graphical User Interface)",
+                    "VUI (Voice User Interface)",
+                    "Touchscreen Interface",
+                    "Augmented Interface"
+                ],
+                answer: 0,
+                explain: "CLI mengandalkan instruksi berupa ketikan teks (misalnya Command Prompt / Terminal)."
+            },
+            {
+                q: "Manakah yang merupakan keuntungan utama dari penggunaan GUI (Graphical User Interface) dibandingkan CLI?",
+                options: [
+                    "Lebih ramah pengguna (user-friendly) dengan elemen visual seperti ikon dan tombol",
+                    "Membutuhkan kapasitas RAM yang jauh lebih kecil",
+                    "Dapat dijalankan tanpa kartu grafis",
+                    "Kecepatan eksekusi perintah selalu 10 kali lebih cepat",
+                    "Bebas dari resiko virus komputer"
+                ],
+                answer: 0,
+                explain: "GUI menyajikan antarmuka visual intuitif berbasis ikon, window, dan cursor sehingga mudah digunakan pemula."
+            },
+            {
+                q: "Pada manajemen proses, status (state) ketika suatu proses sedang dieksekusi instruksinya oleh CPU dinamakan...",
+                options: [
+                    "Running",
+                    "Ready",
+                    "Waiting",
+                    "New",
+                    "Terminated"
+                ],
+                answer: 0,
+                explain: "Status 'Running' menunjukkan instruksi proses tersebut sedang secara aktif dikerjakan oleh CPU."
+            },
+            {
+                q: "Sinyal mendadak yang dikirimkan oleh hardware (seperti klik mouse) atau software ke CPU untuk meminta perhatian segera dinamakan...",
+                options: [
+                    "Interrupt",
+                    "Polling",
+                    "Spooling",
+                    "Paging",
+                    "Parsing"
+                ],
+                answer: 0,
+                explain: "Interrupt menyela alur eksekusi normal CPU untuk menangani peristiwa penting/I/O segera."
+            },
+            {
+                q: "Teknik penampungan sementara data I/O di dalam memori untuk menyelaraskan perbedaan kecepatan antar perangkat dinamakan...",
+                options: [
+                    "Buffering",
+                    "Defragmenting",
+                    "Compiling",
+                    "Formatting",
+                    "Overclocking"
+                ],
+                answer: 0,
+                explain: "Buffering menampung data sementara agar transfer data antara perangkat cepat dan lambat berlangsung efisien."
+            },
+            {
+                q: "Sistem berkas (File System) bawaan yang umum digunakan pada sistem operasi Microsoft Windows modern adalah...",
+                options: [
+                    "NTFS",
+                    "ext4",
+                    "APFS",
+                    "HFS+",
+                    "UFS"
+                ],
+                answer: 0,
+                explain: "NTFS (New Technology File System) adalah sistem berkas standar utama untuk Windows modern."
+            },
+            {
+                q: "Teknik 'Spooling' pada sistem operasi paling sering diterapkan pada pengelolaan perangkat...",
+                options: [
+                    "Printer (Pencetakan Dokumen)",
+                    "Monitor Display",
+                    "RAM Utama",
+                    "Power Supply Unit",
+                    "Internal Speaker"
+                ],
+                answer: 0,
+                explain: "Spooling (Simultaneous Peripheral Operations On-Line) menampung antrean cetak dokumen ke disk sebelum dikirim ke printer."
+            },
+            {
+                q: "Proses pemuatan file utama sistem operasi dari media penyimpanan (SSD/Harddisk) ke dalam RAM saat komputer baru dinyalakan disebut...",
+                options: [
+                    "Booting",
+                    "Hibernating",
+                    "Debugging",
+                    "Formatting",
+                    "Rendering"
+                ],
+                answer: 0,
+                explain: "Booting adalah proses awal pengaktifan komputer hingga OS siap digunakan pengguna."
+            },
+            {
+                q: "Program BIOS / UEFI pada motherboard melakukan pengujian awal terhadap kesiapan komponen fisik komputer saat booting. Proses ini disebut...",
+                options: [
+                    "POST (Power-On Self-Test)",
+                    "Paging",
+                    "System Restore",
+                    "Benchmark",
+                    "Overclocking Test"
+                ],
+                answer: 0,
+                explain: "POST memeriksa kondisi komponen vital seperti RAM, CPU, GPU, dan keyboard sebelum memuat OS."
+            },
+            {
+                q: "Manakah yang BUKAN merupakan tugas atau fungsi utama dari Manajemen Sistem Berkas (File Management)?",
+                options: [
+                    "Mengatur suhu fisik prosessor agar tidak overheating",
+                    "Membuat, menghapus, dan merubah nama berkas",
+                    "Mengatur hak akses (permission) pembacaan dan penulisan berkas",
+                    "Memetakan lokasi fisik berkas pada cluster penyimpanan",
+                    "Menyediakan struktur direktori / folder"
+                ],
+                answer: 0,
+                explain: "Pengaturan suhu fisik CPU adalah tugas sistem pendingin hardware (fan/heatsink), bukan fungsi file system."
+            },
+            {
+                q: "Manakah di bawah ini yang merupakan contoh Sistem Operasi bersifat Proprietary (berbayar / hak cipta tertutup)?",
+                options: [
+                    "Microsoft Windows & macOS",
+                    "Ubuntu Linux",
+                    "Debian Linux",
+                    "Android Open Source Project",
+                    "FreeBSD"
+                ],
+                answer: 0,
+                explain: "Windows dan macOS bersifat komersial dan tertutup (proprietary)."
+            },
+            {
+                q: "Dalam manajemen keamanan OS, hak akses 'Read, Write, Execute' (rwx) bertujuan untuk...",
+                options: [
+                    "Membatasi otorisasi pengguna/aplikasi terhadap pembacaan, pengubahan, dan eksekusi berkas",
+                    "Mempercepat jaringan internet Wi-Fi",
+                    "Mengompres ukuran berkas gambar secara otomatis",
+                    "Menghapus berkas yang tidak terpakai secara berkala",
+                    "Mengubah tampilan tema warna monitor"
+                ],
+                answer: 0,
+                explain: "Hak akses rwx mengatur proteksi keamanan berkas agar tidak diubah atau dijalankan sembarangan."
+            },
+            {
+                q: "Operating System yang dirancang khusus untuk mengelola pusat data, menangani permintaan ribuan pengguna jaringan sekaligus, serta memiliki stabilitas tinggi adalah...",
+                options: [
+                    "Server Operating System (contoh: Ubuntu Server, Windows Server)",
+                    "Embedded OS",
+                    "Real-Time OS",
+                    "Mobile OS",
+                    "Desktop Home Edition"
+                ],
+                answer: 0,
+                explain: "Server OS dioptimalkan untuk layanan jaringan, keamanan tinggi, dan menangani traffic beban tinggi."
+            },
+            {
+                q: "Bagian dari Sistem Operasi yang menerjemahkan perintah instruksi teks yang diketik pengguna menjadi panggilan sistem (system call) dinamakan...",
+                options: [
+                    "Shell / Command Interpreter",
+                    "Register",
+                    "BIOS",
+                    "Cache",
+                    "Partition Table"
+                ],
+                answer: 0,
+                explain: "Shell bertindak sebagai penerjemah perintah pengguna ke perintah yang dimengerti kernel."
+            },
+            {
+                q: "Mengapa abstraksi perangkat keras (hardware abstraction) oleh Sistem Operasi sangat menguntungkan pemrogram aplikasi?",
+                options: [
+                    "Pemrogram tidak perlu menulis kode spesifik untuk setiap merk/tipe hardware yang berbeda",
+                    "Aplikasi otomatis menjadi gratis tanpa lisensi",
+                    "Komputer tidak lagi memerlukan daya listrik",
+                    "Kapasitas harddisk meningkat dua kali lipat",
+                    "Semua bug pada kode aplikasi hilang otomatis"
+                ],
+                answer: 0,
+                explain: "Abstraksi OS menyembunyikan detail fisik hardware sehingga programmer cukup memanggil API standar OS."
+            },
+            {
+                q: "Android merupakan Sistem Operasi perangkat bergerak yang populer. Android dibangun di atas fondasi (kernel) dari sistem operasi...",
+                options: [
+                    "Linux",
+                    "Windows NT",
+                    "MS-DOS",
+                    "Solaris",
+                    "Symbian"
+                ],
+                answer: 0,
+                explain: "Kernel Android berbasis kernel Linux yang dimodifikasi untuk perangkat mobile."
+            },
+            {
+                q: "Manakah tindakan di bawah ini yang mencerminkan peran Sistem Operasi sebagai 'Protector & Gatekeeper' keamanan?",
+                options: [
+                    "Meminta otentikasi login password/biometrik dan memblokir akses file milik user lain",
+                    "Menjalankan game dengan grafik 3D tingkat tinggi",
+                    "Membersihkan debu pada kipas processor",
+                    "Mengisi ulang daya baterai laptop",
+                    "Memutar musik video kualitas 4K"
+                ],
+                answer: 0,
+                explain: "Meminta login dan membatasi hak akses file user adalah wujud proteksi keamanan oleh OS."
+            }
+        ];
+
+        // Active State Variables
+        let activeQuestions = [];
+        let userAnswers = {};
+        let currentQIndex = 0;
+        let studentData = {};
+        let quizTimerInterval = null;
+        let secondsRemaining = 35 * 60; // 35 Mins
+        let timeTakenSeconds = 0;
+        let cheatViolations = 0;
+        let isQuizActive = false;
+
+        // Initialize Prepared Questions (Shuffled Options & Questions)
+        function prepareQuestions() {
+            // Clone & Shuffle questions
+            activeQuestions = rawQuestions.map((item, idx) => {
+                // Shuffle options while tracking correct index
+                const optionsWithOrigIdx = item.options.map((opt, oIdx) => ({ text: opt, isCorrect: oIdx === item.answer }));
+                const shuffledOpts = [...optionsWithOrigIdx].sort(() => Math.random() - 0.5);
+                const newCorrectIdx = shuffledOpts.findIndex(o => o.isCorrect);
+
+                return {
+                    id: idx + 1,
+                    q: item.q,
+                    options: shuffledOpts.map(o => o.text),
+                    correctAnswer: newCorrectIdx,
+                    explain: item.explain
+                };
+            }).sort(() => Math.random() - 0.5);
+        }
+
+        function startQuiz(e) {
+            e.preventDefault();
+            playSound('success');
+
+            const name = document.getElementById('studentName').value.trim();
+            const cls = document.getElementById('studentClass').value.trim();
+            const absen = document.getElementById('studentAbsen').value.trim();
+
+            if (!name || !cls || !absen) return;
+
+            studentData = { name, class: cls, absen };
+            document.getElementById('displayStudentInfo').innerText = `${name} (Kelas: ${cls} / Absen: ${absen})`;
+
+            // Reset state
+            userAnswers = {};
+            currentQIndex = 0;
+            cheatViolations = 0;
+            secondsRemaining = 35 * 60;
+            timeTakenSeconds = 0;
+            updateCheatBadge();
+
+            prepareQuestions();
+
+            // Render view
+            document.getElementById('quizRegStep').classList.add('hidden');
+            document.getElementById('quizWorkstep').classList.remove('hidden');
+
+            renderQuestionGrid();
+            renderCurrentQuestion();
+            startTimer();
+
+            isQuizActive = true;
+            showToast("Uji Kompetensi Dimulai! Selamat Bekerja Jujur.");
+        }
+
+        function startTimer() {
+            clearInterval(quizTimerInterval);
+            quizTimerInterval = setInterval(() => {
+                if (secondsRemaining > 0) {
+                    secondsRemaining--;
+                    timeTakenSeconds++;
+                    const m = Math.floor(secondsRemaining / 60);
+                    const s = secondsRemaining % 60;
+                    document.getElementById('quizTimer').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                } else {
+                    clearInterval(quizTimerInterval);
+                    autoSubmitOnTimeOut();
+                }
+            }, 1000);
+        }
+
+        function renderQuestionGrid() {
+            const gridEl = document.getElementById('questionGrid');
+            gridEl.innerHTML = '';
+            for (let i = 0; i < activeQuestions.length; i++) {
+                const isAnswered = userAnswers[i] !== undefined;
+                const isCurrent = i === currentQIndex;
+
+                let bgClass = "bg-slate-950 border-slate-800 text-slate-400";
+                if (isAnswered) bgClass = "bg-emerald-500/20 border-emerald-500 text-emerald-400 font-bold";
+                if (isCurrent) bgClass += " ring-2 ring-cyan-400";
+
+                gridEl.innerHTML += `
+                    <button onclick="jumpToQuestion(${i})" class="w-full h-9 rounded-lg border text-xs font-semibold transition flex items-center justify-center ${bgClass}">
+                        ${i + 1}
+                    </button>
+                `;
+            }
+        }
+
+        function renderCurrentQuestion() {
+            const qData = activeQuestions[currentQIndex];
+            document.getElementById('currentQNum').innerText = currentQIndex + 1;
+            document.getElementById('questionText').innerText = `${currentQIndex + 1}. ${qData.q}`;
+
+            // Render Options
+            const container = document.getElementById('optionsContainer');
+            const labels = ['A', 'B', 'C', 'D', 'E'];
+
+            container.innerHTML = qData.options.map((optText, optIdx) => {
+                const isSelected = userAnswers[currentQIndex] === optIdx;
+                const borderClass = isSelected ? "border-cyan-500 bg-cyan-500/10 text-cyan-300" : "border-slate-800 bg-slate-950 text-slate-300 hover:border-slate-700";
+                const radioClass = isSelected ? "bg-cyan-500 border-cyan-400 text-slate-950 font-bold" : "bg-slate-900 border-slate-700 text-slate-400";
+
+                return `
+                    <button onclick="selectOption(${optIdx})" class="w-full text-left p-4 rounded-2xl border transition-all ${borderClass} flex items-start gap-3 group">
+                        <span class="w-7 h-7 rounded-xl border flex items-center justify-center text-xs font-extrabold flex-shrink-0 mt-0.5 ${radioClass}">
+                            ${labels[optIdx]}
+                        </span>
+                        <span class="text-xs sm:text-sm leading-relaxed">${optText}</span>
+                    </button>
+                `;
+            }).join('');
+
+            // Button Prev state
+            document.getElementById('btnPrevQ').disabled = (currentQIndex === 0);
+            
+            // Button Next text
+            const nextBtn = document.getElementById('btnNextQ');
+            if (currentQIndex === activeQuestions.length - 1) {
+                nextBtn.innerHTML = `Selesai & Review <i class="fa-solid fa-check-double"></i>`;
+            } else {
+                nextBtn.innerHTML = `Selanjutnya <i class="fa-solid fa-arrow-right"></i>`;
+            }
+
+            renderQuestionGrid();
+        }
+
+        function selectOption(optIdx) {
+            playSound('click');
+            userAnswers[currentQIndex] = optIdx;
+            renderCurrentQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQIndex < activeQuestions.length - 1) {
+                currentQIndex++;
+                renderCurrentQuestion();
+            } else {
+                confirmSubmitQuiz();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQIndex > 0) {
+                currentQIndex--;
+                renderCurrentQuestion();
+            }
+        }
+
+        function jumpToQuestion(idx) {
+            playSound('click');
+            currentQIndex = idx;
+            renderCurrentQuestion();
+        }
+
+        function confirmSubmitQuiz() {
+            playSound('click');
+            const answeredCount = Object.keys(userAnswers).length;
+            const unanswered = activeQuestions.length - answeredCount;
+
+            const warnEl = document.getElementById('unansweredWarningText');
+            if (unanswered > 0) {
+                warnEl.innerText = `Peringatan: Ada ${unanswered} soal yang belum Anda jawab!`;
+            } else {
+                warnEl.innerText = `Semua 25 soal telah terjawab dengan lengkap.`;
+            }
+
+            document.getElementById('submitModal').classList.remove('hidden');
+        }
+
+        function closeSubmitModal() {
+            document.getElementById('submitModal').classList.add('hidden');
+        }
+
+        function autoSubmitOnTimeOut() {
+            showToast("Waktu Ujian Telah Habis!");
+            processFinalSubmit();
+        }
+
+        function processFinalSubmit() {
+            isQuizActive = false;
+            clearInterval(quizTimerInterval);
+            closeSubmitModal();
+            playSound('success');
+
+            // Calculate Score
+            let correctCount = 0;
+            activeQuestions.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correctAnswer) {
+                    correctCount++;
+                }
+            });
+
+            const totalQ = activeQuestions.length;
+            const wrongCount = totalQ - correctCount;
+            const finalScore = Math.round((correctCount / totalQ) * 100);
+
+            // Calculate Integrity Score
+            // Base 100%, deduct 15% per tab violation
+            const integrityScore = Math.max(0, 100 - (cheatViolations * 15));
+
+            // Format Time Taken
+            const mins = Math.floor(timeTakenSeconds / 60);
+            const secs = timeTakenSeconds % 60;
+            const formattedTime = `${mins} Menit ${secs} Detik`;
+
+            // Display Results
+            document.getElementById('finalScoreDisplay').innerText = finalScore;
+            document.getElementById('finalIntegrityDisplay').innerText = `${integrityScore}%`;
+            document.getElementById('finalViolationText').innerText = `${cheatViolations} Violasi Tab`;
+
+            document.getElementById('countCorrect').innerText = `${correctCount} / ${totalQ}`;
+            document.getElementById('countWrong').innerText = `${wrongCount} / ${totalQ}`;
+            document.getElementById('timeTakenDisplay').innerText = `${mins}m ${secs}s`;
+
+            // Predicate
+            let predicate = "Kurang";
+            if (finalScore >= 90) predicate = "Sangat Baik (A)";
+            else if (finalScore >= 80) predicate = "Baik (B)";
+            else if (finalScore >= 70) predicate = "Cukup (C)";
+            document.getElementById('gradePredicate').innerText = predicate;
+
+            // Render Review
+            renderReviewList();
+
+            // Switch view
+            document.getElementById('quizWorkstep').classList.add('hidden');
+            document.getElementById('quizResultStep').classList.remove('hidden');
+        }
+
+        function renderReviewList() {
+            const listEl = document.getElementById('reviewList');
+            const labels = ['A', 'B', 'C', 'D', 'E'];
+
+            listEl.innerHTML = activeQuestions.map((q, idx) => {
+                const userAnsIdx = userAnswers[idx];
+                const isCorrect = userAnsIdx === q.correctAnswer;
+                const statusBadge = isCorrect 
+                    ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><i class="fa-solid fa-check mr-1"></i> Benar</span>`
+                    : `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20"><i class="fa-solid fa-xmark mr-1"></i> Salah</span>`;
+
+                return `
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-400">Soal Nomor ${idx + 1}</span>
+                            ${statusBadge}
+                        </div>
+                        <h4 class="font-bold text-white text-sm sm:text-base leading-relaxed">${q.q}</h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="p-3 rounded-xl ${isCorrect ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300' : 'bg-rose-500/10 border border-rose-500/30 text-rose-300'}">
+                                <b>Jawaban Anda:</b> ${userAnsIdx !== undefined ? labels[userAnsIdx] + '. ' + q.options[userAnsIdx] : 'Tidak Dijawab'}
+                            </div>
+                            ${!isCorrect ? `
+                                <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">
+                                    <b>Jawaban Kunci:</b> ${labels[q.correctAnswer]}. ${q.options[q.correctAnswer]}
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-400 leading-relaxed">
+                            <b class="text-cyan-400"><i class="fa-solid fa-circle-info mr-1"></i> Pembahasan:</b> ${q.explain}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleReviewMode() {
+            playSound('click');
+            const rev = document.getElementById('reviewContainer');
+            rev.classList.toggle('hidden');
+            if (!rev.classList.contains('hidden')) {
+                rev.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        /* -------------------------------------------------------------
+           5. LAPORAN KE GURU (WA FORMAT & PRINT PDF)
+        ------------------------------------------------------------- */
+        function copyTeacherReport() {
+            playSound('click');
+            const totalQ = activeQuestions.length;
+            let correctCount = 0;
+            activeQuestions.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correctAnswer) correctCount++;
+            });
+            const score = Math.round((correctCount / totalQ) * 100);
+            const integrity = Math.max(0, 100 - (cheatViolations * 15));
+            const mins = Math.floor(timeTakenSeconds / 60);
+            const secs = timeTakenSeconds % 60;
+
+            const reportText = 
+`*LAPORAN UJI KOMPETENSI INFORMATIKA*
+*Topik: Sistem Operasi (Operating System)*
+
+👤 *Data Murid:*
+• Nama Lengkap: ${studentData.name}
+• Kelas/Rombel: ${studentData.class}
+• No. Absen: ${studentData.absen}
+
+📊 *Hasil Uji Kompetensi:*
+• Nilai Akhir: *${score} / 100*
+• Benar: ${correctCount} dari ${totalQ} soal
+• Waktu Pengerjaan: ${mins} menit ${secs} detik
+• Integrity Score: *${integrity}%* (Violasi Tab: ${cheatViolations}x)
+
+_Dikirim otomatis dari OS Academy Web Media Pembelajaran_`;
+
+            // Copy to clipboard
+            const tempArea = document.createElement('textarea');
+            tempArea.value = reportText;
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempArea);
+
+            showToast("Format Laporan Berhasil Disalin! Siap dikirim ke WA Guru.");
+        }
+
+        function printResultCard() {
+            playSound('click');
+            window.print();
+        }
+
+        /* -------------------------------------------------------------
+           6. FITUR ANTI-NYONTEK SAFEGUARDS (TAB SWITCH DETECTOR)
+        ------------------------------------------------------------- */
+        function triggerCheatViolation() {
+            if (!isQuizActive) return;
+
+            cheatViolations++;
+            playSound('cheat');
+            document.getElementById('cheatCountDisplay').innerText = `${cheatViolations} Kali`;
+            document.getElementById('modalCheatCount').innerText = cheatViolations;
+            document.getElementById('cheatModal').classList.remove('hidden');
+
+            updateCheatBadge();
+        }
+
+        function closeCheatModal() {
+            document.getElementById('cheatModal').classList.add('hidden');
+        }
+
+        function updateCheatBadge() {
+            const badge = document.getElementById('cheatBadge');
+            const integrity = Math.max(0, 100 - (cheatViolations * 15));
+            
+            if (isQuizActive) {
+                badge.classList.remove('hidden');
+                badge.innerHTML = `<i class="fa-solid fa-shield-halved mr-1"></i>Integritas ${integrity}%`;
+                if (cheatViolations > 0) {
+                    badge.className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20";
+                }
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // Visibility Change Listener
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isQuizActive) {
+                triggerCheatViolation();
+            }
+        });
+
+        // Window Blur Listener (Alt+Tab / Click outside)
+        window.addEventListener('blur', () => {
+            if (isQuizActive) {
+                triggerCheatViolation();
+            }
+        });
+
+        // Disable Copy, Cut, Paste & Context Menu on Quiz Page
+        document.addEventListener('contextmenu', (e) => {
+            if (isQuizActive) e.preventDefault();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (isQuizActive) {
+                // Prevent Ctrl+C, Ctrl+V, F12, Ctrl+Shift+I
+                if (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'u' || e.key === 'a')) {
+                    e.preventDefault();
+                    showToast("Fitur Copy-Paste Dinonaktifkan!");
+                }
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        /* Helper Toast */
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        /* Initial Execution */
+        window.onload = function() {
+            initGame();
+        };
+    </script>
+</body>
+</html>
